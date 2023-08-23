@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
-from os import getenv
+import os
 import sqlalchemy
 from sqlalchemy import Column, String, Integer, Float, Table, ForeignKey
 from sqlalchemy.orm import relationship
 
-if getenv('HBNB_TYPE_STORAGE') == 'db':
+if os.getenv('HBNB_TYPE_STORAGE') == 'db':
     place_amenity = Table('place_amenity', Base.metadata,
                           Column('place_id',
                                  String(60),
@@ -22,7 +22,7 @@ if getenv('HBNB_TYPE_STORAGE') == 'db':
 
 class Place(BaseModel, Base):
     """Representation of Place """
-    if getenv('HBNB_TYPE_STORAGE') == 'db':
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         __tablename__ = 'places'
         city_id = Column(String(60),
                          ForeignKey("cities.id"),
@@ -81,7 +81,7 @@ class Place(BaseModel, Base):
                 list_review.append(review)
         return list_review
 
-    if getenv('HBNB_TYPE_STORAGE') != 'db':
+    if os.getenv('HBNB_TYPE_STORAGE') != 'db':
         @property
         def amenities(self):
             """attribute that returns list of Amenity instances"""
