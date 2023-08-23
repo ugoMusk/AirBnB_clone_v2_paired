@@ -113,27 +113,47 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    
-
     def help_create(self):
         """ Help information for the create method """
         print("Creates a class of any type")
         print("[Usage]: create <className>\n")
     
     def do_create(self, arg):
-        """Creates a new instance of a class"""
-        args = arg.split()
-        if len(args) == 0:
-            print("** class name missing **")
-            return False
-        if args[0] in classes:
-            new_dict = self._key_value_parser(args[1:])
-            instance = classes[args[0]](**new_dict)
-        else:
-            print("** class doesn't exist **")
-            return False
-        print(instance.id)
-        instance.save()
+    """Creates a new instance of a class"""
+    args = arg.split()
+    if len(args) == 0:
+        print("** class name missing **")
+        return False
+    if args[0] not in classes:
+        print("** class doesn't exist **")
+        return False
+
+    new_dict = self._key_value_parser(args[1:])
+    instance = classes[args[0]](**new_dict)
+
+    print(instance.id)
+    instance.save()
+    return True
+
+    def _key_value_parser(self, args):
+        new_dict = {}
+        for param in args:
+            key, value = param.split("=")
+            key = key.strip()
+            value = value.strip()
+
+            if key == "name":
+                value = value.replace("\"", "\\\"")
+                value = value.replace("_", " ")
+            elif key == "price":
+                try:
+                    float(value)
+                except ValueError:
+                    continue
+
+            new_dict[key] = value
+
+        return new_dict
 
     def do_show(self, args):
         """ Method to show an individual object """
