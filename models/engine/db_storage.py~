@@ -1,0 +1,17 @@
+#!/usr/bin/python3
+""" new Storage engine module """
+
+
+class DBStorage:
+    """ class the defines a database engine """
+    __engine = None
+    __session = None
+
+    def __init__(self):
+        """ class intitialization method for the storage object"""
+        usr = os.getenv('HBNB_MYSQL_USER')
+        pwd = os.getenv('HBNB_MYSQL_PWD')
+        host = os.getenv('HBNB_MYSQL_HOST')
+        database = os.getenv('HBNB_MYSQL_DB')
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(
+            user, passwd, host, database))
