@@ -107,16 +107,3 @@ class test_fileStorage(unittest.TestCase):
         from models.engine.file_storage import FileStorage
         print(type(storage))
         self.assertEqual(type(storage), FileStorage)
-
-    def test_file_storage(self):
-    """ Test the file storage method """
-    b1 = BaseModel()
-    # Save the object to the file
-    storage.save()
-    # Check if the object is saved to the file
-    self.assertTrue(os.path.isfile('file.json'))
-    # Load the objects from the file
-    objects = storage.all()
-    # Check if the object is loaded from the file
-    self.assertEqual(len(objects), 1)
-    self.assertEqual(objects[0].id, b1.id)
