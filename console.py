@@ -119,7 +119,7 @@ class HBNBCommand(cmd.Cmd):
         print("[Usage]: create <className>\n")
     
     def do_create(self, args):
-    """ Create an object of any class with given parameters """
+    """ Create an object of any class with parameters"""
     if not args:
         print("** class name missing **")
         return
@@ -131,27 +131,34 @@ class HBNBCommand(cmd.Cmd):
         print("** class doesn't exist **")
         return
     
-    param_dict = {}
+    params = {}
     for param in args_list[1:]:
-        key_value = param.split("=")
-        if len(key_value) == 2:
-            key, value = key_value
-            if value.startswith('"') and value.endswith('"'):
-                value = value[1:-1].replace('_', ' ')
-            elif "." in value:
-                try:
-                    value = float(value)
-                except ValueError:
-                    continue
-            else:
-                try:
-                    value = int(value)
-                except ValueError:
-                    continue
-            param_dict[key] = value
+        if '=' not in param:
+            print("** invalid parameter format: {} **".format(param))
+            return
+        
+        key, value = param.split('=')
+        value = value.replace('_', ' ').replace('\\"', '"')
+        
+        if value[0] == '"' and value[-1] == '"':
+            value = value[1:-1]
+        elif '.' in value:
+            try:
+                value = float(value)
+            except ValueError:
+                print("** invalid parameter format: {} **".format(param))
+                return
+        else:
+            try:
+                value = int(value)
+            except ValueError:
+                print("** invalid parameter format: {} **".format(param))
+                return
+        
+        params[key] = value
     
-    new_instance = HBNBCommand.classes[class_name](**param_dict)
-    new_instance.save()
+    new_instance = HBNBCommand.classes[class_name](**params)
+    storage.save()
     print(new_instance.id)
 
     def do_show(self, args):
