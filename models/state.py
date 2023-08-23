@@ -10,7 +10,7 @@ import os
 
 class State(BaseModel, Base):
     """ State class """
-    if os.getenv("HBNB_STORAGE_TYPE") = "db":
+    if os.getenv("HBNB_STORAGE_TYPE") == "db":
         __tablename__ = "states"
         name = Column(String(128), nullable=False)
         cities = relationship("City", cascade="all, delete", backref="state")

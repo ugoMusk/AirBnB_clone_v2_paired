@@ -13,6 +13,14 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
+classes_dict = {
+    'Amenity': Amenity,
+    'City': City,
+    'Place': Place,
+    'State': State,
+    'Review': Review,
+    'User': User
+}
 
 class DBStorage:
     """ class the defines a database engine """
@@ -32,3 +40,65 @@ class DBStorage:
             
     def all(self, cls=None):
         """ methods that querries class objects based of whether cls is provide and if not, querries all object types """
+        if not self.__session:
+            self.reload()
+        objects = {}
+        if type(cls) == str:
+            cls = classes_dict.get(cls, None)
+        if cls:
+            for obj in self.__session.query(cls):
+                objects[obj.__class__.__name__ +
+                        '.' + obj.id] = obj
+        else:
+            for cls in classes_dict.values():
+                for obj in self.__session.query(cls):
+                    objects[obj.__class__.__name__ +
+                            '.' + obj.id] = obj
+        return objects
+
+    def reload(self):
+        """reloads objects from  database"""
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
+        Base.metadata.create_all(self.__engine)
+        self.__session = scoped_session(session_factory)
+
+    def new(self, obj):
+        """creates a new object"""
+        self.__session.add(obj)
+
+    def save(self):
+        """saves the current session"""
+        self.__session.commit()
+
+    def delete(self, obj=None):
+        """deletes an object"""
+        if not self.__session:
+            self.reload()
+        if obj:
+            self.__session.delete(obj)
+
+    def close(self):
+        """Dispose of current session if active"""
+        self.__session.remove()
+
+    def get(self, cls, id):
+        """Retrieve an object"""
+        if cls is not None and type(cls) is str and id is not None and\
+           type(id) is str and cls in classes_dict:
+            cls = classes_dict[cls]
+            result = self.__session.query(cls).filter(cls.id == id).first()
+            return result
+        else:
+            return None
+
+    def count(self, cls=None):
+        """Count number of objects in storage"""
+        total_obj = 0
+        if type(cls) == str and cls in classes_dict:
+            cls = classes_dict[cls]
+            total_obj = self.__session.query(cls).count()
+        elif cls is None:
+            for cls in classes_dict.values():
+                total_obj += self.__session.query(cls).count()
+        return total_obj
