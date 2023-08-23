@@ -119,47 +119,47 @@ class HBNBCommand(cmd.Cmd):
         print("[Usage]: create <className>\n")
     
     def do_create(self, args):
-    """ Create an object of any class with parameters"""
-    if not args:
-        print("** class name missing **")
-        return
-    
-    args_list = args.split()
-    class_name = args_list[0]
-    
-    if class_name not in HBNBCommand.classes:
-        print("** class doesn't exist **")
-        return
-    
-    params = {}
-    for param in args_list[1:]:
-        if '=' not in param:
-            print("** invalid parameter format: {} **".format(param))
+        """ Create an object of any class with parameters """
+        if not args:
+            print("** class name missing **")
             return
-        
-        key, value = param.split('=')
-        value = value.replace('_', ' ').replace('\\"', '"')
-        
-        if value[0] == '"' and value[-1] == '"':
-            value = value[1:-1]
-        elif '.' in value:
-            try:
-                value = float(value)
-            except ValueError:
-                print("** invalid parameter format: {} **".format(param))
-                return
-        else:
-            try:
-                value = int(value)
-            except ValueError:
-                print("** invalid parameter format: {} **".format(param))
-                return
-        
-        params[key] = value
     
-    new_instance = HBNBCommand.classes[class_name](**params)
-    storage.save()
-    print(new_instance.id)
+        args_list = args.split()
+        class_name = args_list[0]
+    
+        if class_name not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
+    
+        params = {}
+        for param in args_list[1:]:
+            if '=' not in param:
+                print("** invalid parameter format: {} **".format(param))
+                return
+        
+            key, value = param.split('=')
+            value = value.replace('_', ' ').replace('\\"', '"')
+        
+            if value[0] == '"' and value[-1] == '"':
+                value = value[1:-1]
+            elif '.' in value:
+                try:
+                    value = float(value)
+                except ValueError:
+                    print("** invalid parameter format: {} **".format(param))
+                    return
+            else:
+                try:
+                    value = int(value)
+                except ValueError:
+                    print("** invalid parameter format: {} **".format(param))
+                    return
+        
+            params[key] = value
+    
+        new_instance = HBNBCommand.classes[class_name](**params)
+        storage.save()
+        print(new_instance.id)
 
     def do_show(self, args):
         """ Method to show an individual object """
