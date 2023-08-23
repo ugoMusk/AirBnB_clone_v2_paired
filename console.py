@@ -118,42 +118,41 @@ class HBNBCommand(cmd.Cmd):
         print("Creates a class of any type")
         print("[Usage]: create <className>\n")
     
-    def do_create(self, arg):
-    """Creates a new instance of a class"""
-    args = arg.split()
-    if len(args) == 0:
+    def do_create(self, args):
+    """ Create an object of any class with given parameters """
+    if not args:
         print("** class name missing **")
-        return False
-    if args[0] not in classes:
+        return
+    
+    args_list = args.split()
+    class_name = args_list[0]
+    
+    if class_name not in HBNBCommand.classes:
         print("** class doesn't exist **")
-        return False
-
-    new_dict = self._key_value_parser(args[1:])
-    instance = classes[args[0]](**new_dict)
-
-    print(instance.id)
-    instance.save()
-    return True
-
-    def _key_value_parser(self, args):
-        new_dict = {}
-        for param in args:
-            key, value = param.split("=")
-            key = key.strip()
-            value = value.strip()
-
-            if key == "name":
-                value = value.replace("\"", "\\\"")
-                value = value.replace("_", " ")
-            elif key == "price":
+        return
+    
+    param_dict = {}
+    for param in args_list[1:]:
+        key_value = param.split("=")
+        if len(key_value) == 2:
+            key, value = key_value
+            if value.startswith('"') and value.endswith('"'):
+                value = value[1:-1].replace('_', ' ')
+            elif "." in value:
                 try:
-                    float(value)
+                    value = float(value)
                 except ValueError:
                     continue
-
-            new_dict[key] = value
-
-        return new_dict
+            else:
+                try:
+                    value = int(value)
+                except ValueError:
+                    continue
+            param_dict[key] = value
+    
+    new_instance = HBNBCommand.classes[class_name](**param_dict)
+    new_instance.save()
+    print(new_instance.id)
 
     def do_show(self, args):
         """ Method to show an individual object """
