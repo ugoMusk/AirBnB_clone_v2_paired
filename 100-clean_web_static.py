@@ -4,8 +4,7 @@ out-of-date archives, using the function do_clean:"""
 from fabric.api import local, env, put, run
 from time import strftime
 import os.path
-env.hosts = ['35.229.54.225', '35.231.225.251']
-
+env.hosts = ['52.91.153.40', '54.84.51.64']
 
 def do_pack():
     """generate .tgz archive of web_static/ folder"""
