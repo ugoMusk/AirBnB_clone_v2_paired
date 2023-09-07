@@ -9,7 +9,7 @@ import os
 
 class City(BaseModel, Base):
     """ The city class, contains state ID and name """
-    if os.getenv("HBNB_STORAGE_TYPE") = "db":
+    if os.getenv("HBNB_STORAGE_TYPE") == "db":
         __table_name__ = "cities"
 
         state_id = Column(String(60), ForeignKey('states.id'),
