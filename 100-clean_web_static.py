@@ -7,7 +7,6 @@ import os.path
 env.hosts = ['52.91.153.40', '54.84.51.64']
 
 def do_pack():
-    """generate .tgz archive of web_static/ folder"""
     timenow = strftime("%Y%M%d%H%M%S")
     try:
         local("mkdir -p versions")
@@ -19,9 +18,6 @@ def do_pack():
 
 
 def do_deploy(archive_path):
-    """
-    Deploy archive to web server
-    """
     if os.path.isfile(archive_path) is False:
         return False
     try:

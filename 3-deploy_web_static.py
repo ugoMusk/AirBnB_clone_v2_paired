@@ -11,6 +11,7 @@ env.hosts = ['52.91.153.40', '54.84.51.64']
 
 
 def do_pack():
+    """pack the server"""
     timenow = strftime("%Y%M%d%H%M%S")
     try:
         local("mkdir -p versions")
@@ -22,6 +23,7 @@ def do_pack():
 
 
 def do_deploy(archive_path):
+    """deploy the server"""
     if os.path.isfile(archive_path) is False:
         return False
     try:
@@ -43,6 +45,7 @@ def do_deploy(archive_path):
 
 
 def deploy():
+    """deploy"""
     archive_path = do_pack()
     if archive_path is None:
         return False
