@@ -1,14 +1,14 @@
 #!/usr/bin/python3
-"""Compress web static package
+"""Compress and upload web static package to Web Servers
 """
 from fabric.api import *
 from datetime import datetime
 from os import path
 
 
-env.hosts = ['100.25.19.204', '54.157.159.85']
+env.hosts = ['54.234.9.227', '18.207.236.151']
 env.user = 'ubuntu'
-env.key_filename = '~/.ssh/id_rsa'
+env.key_filename = '~/.ssh/school'
 
 
 def do_deploy(archive_path):
@@ -43,10 +43,10 @@ releases/web_static_{}/'.format(timestamp))
 web_static_{}/web_static'
                     .format(timestamp))
 
-                # delete pre-existing sym link
+                # delete existing sym link
                 run('sudo rm -rf /data/web_static/current')
 
-                # re-establish symbolic link
+                # recreate symbolic link
                 run('sudo ln -s /data/web_static/releases/\
 web_static_{}/ /data/web_static/current'.format(timestamp))
         except:
