@@ -4,7 +4,7 @@ from time import strftime
 
 
 def do_pack():
-    """ A script that generates archive the contents of web_static folder"""
+    """A script that generates archive the contents of web_static folder"""
 
     filename = strftime("%Y%m%d%H%M%S")
     try:
