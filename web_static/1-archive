@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+name=${PWD##*/}
+cd ..
+tar czf "$web_static.tar.gz" "$name"

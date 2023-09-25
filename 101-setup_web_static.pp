@@ -6,12 +6,12 @@ $nginx_conf = "server {
     add_header X-Served-By ${hostname};
     root   /var/www/html;
     index  index.html index.htm;
-    location /hbnb_static {
+    location /web_static {
         alias /data/web_static/current;
         index index.html index.htm;
     }
     location /redirect_me {
-        return 301 http://linktr.ee/firdaus_h_salim/;
+        return 301 https://ugox.tech/;
     }
     error_page 404 /404.html;
     location /404 {
